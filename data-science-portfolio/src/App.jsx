@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+  const elements = document.querySelectorAll(
+    ".section-block, .project-card, .experience-card, .education-card"
+  );
+
+  elements.forEach((element) => {
+    element.classList.add("reveal");
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.12,
+    }
+  );
+
+  elements.forEach((element) => observer.observe(element));
+
+  return () => observer.disconnect();
+}, []);
   const skills = [
     "Python",
     "SQL",
